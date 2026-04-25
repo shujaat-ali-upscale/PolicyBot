@@ -89,30 +89,33 @@ export default function ChatPage() {
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {messages.map((msg) => (
             <div key={msg.id}>
-              <ChatMessage
-                role={msg.role}
-                content={msg.content}
-                sources={msg.sources}
-              />
-              {msg.isStreaming && msg.content && (
-                <span className="inline-block w-2 h-4 ml-1 bg-gray-500 animate-pulse rounded-sm align-middle" />
+              {msg.isStreaming && msg.content === '' ? (
+                <div className="flex gap-3">
+                  <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                    <Loader2 size={16} className="text-gray-500 animate-spin" />
+                  </div>
+                  <div className="bg-white border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
+                    <div className="flex gap-1 items-center h-4">
+                      <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <ChatMessage
+                    role={msg.role}
+                    content={msg.content}
+                    sources={msg.sources}
+                  />
+                  {msg.isStreaming && msg.content && (
+                    <span className="inline-block w-2 h-4 ml-1 bg-gray-500 animate-pulse rounded-sm align-middle" />
+                  )}
+                </>
               )}
             </div>
           ))}
-          {isLoading && messages[messages.length - 1]?.content === '' && (
-            <div className="flex gap-3">
-              <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                <Loader2 size={16} className="text-gray-500 animate-spin" />
-              </div>
-              <div className="bg-white border border-gray-200 rounded-2xl rounded-tl-sm px-4 py-3 shadow-sm">
-                <div className="flex gap-1 items-center h-4">
-                  <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                </div>
-              </div>
-            </div>
-          )}
           {error && (
             <p className="text-center text-sm text-red-500">{error}</p>
           )}
