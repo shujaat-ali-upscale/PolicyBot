@@ -1,16 +1,13 @@
-import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { ChevronDown, ChevronRight, FileText, User, Bot } from 'lucide-react';
-import type { Source } from '../api/chat';
+import { User, Bot } from 'lucide-react';
 
 interface ChatMessageProps {
   role: 'user' | 'assistant';
   content: string;
-  sources?: Source[];
+  sources?: unknown[];
 }
 
-export function ChatMessage({ role, content, sources = [] }: ChatMessageProps) {
-  const [sourcesOpen, setSourcesOpen] = useState(false);
+export function ChatMessage({ role, content }: ChatMessageProps) {
   const isUser = role === 'user';
 
   return (
@@ -37,32 +34,6 @@ export function ChatMessage({ role, content, sources = [] }: ChatMessageProps) {
             </div>
           )}
         </div>
-        {!isUser && sources.length > 0 && (
-          <div className="w-full">
-            <button
-              onClick={() => setSourcesOpen(!sourcesOpen)}
-              className="flex items-center gap-1 text-xs text-gray-400 hover:text-[#29ABE2] transition-colors"
-            >
-              {sourcesOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-              {sources.length} source{sources.length > 1 ? 's' : ''}
-            </button>
-            {sourcesOpen && (
-              <div className="mt-2 space-y-2">
-                {sources.map((source, i) => (
-                  <div key={i} className="bg-gray-50 rounded-lg p-3 border border-gray-100">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <FileText size={11} className="text-gray-400" />
-                      <span className="text-xs text-gray-400 font-medium">
-                        Chunk {source.chunk_index + 1}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-600 leading-relaxed">{source.text}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
       </div>
     </div>
   );
