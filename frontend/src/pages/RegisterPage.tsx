@@ -4,11 +4,15 @@ import { AlertCircle } from 'lucide-react';
 import { register } from '../api/auth';
 import { useAuth } from '../context/AuthContext';
 
-export default function RegisterPage() {
+interface RegisterPageProps {
+  isAdminRoute?: boolean;
+}
+
+export default function RegisterPage({ isAdminRoute = false }: RegisterPageProps) {
+  const role = isAdminRoute ? 'admin' : 'employee';
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<'employee' | 'admin'>('employee');
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { login: authLogin } = useAuth();
@@ -37,7 +41,9 @@ export default function RegisterPage() {
         <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
           <div className="bg-gradient-to-r from-[#29ABE2] to-[#1e90c7] px-6 py-6">
             <h1 className="text-2xl font-bold text-white">PolicyBot</h1>
-            <p className="text-blue-100 text-sm mt-1">Create your account</p>
+            <p className="text-blue-100 text-sm mt-1">
+              {isAdminRoute ? 'Create admin account' : 'Create your account'}
+            </p>
           </div>
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             {error && (
@@ -76,17 +82,6 @@ export default function RegisterPage() {
                 minLength={8}
                 className="w-full rounded-lg border border-gray-300 py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#29ABE2] focus:border-[#29ABE2] transition-all"
               />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
-              <select
-                value={role}
-                onChange={(e) => setRole(e.target.value as 'employee' | 'admin')}
-                className="w-full rounded-lg border border-gray-300 py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#29ABE2] focus:border-[#29ABE2] bg-white transition-all"
-              >
-                <option value="employee">Employee</option>
-                <option value="admin">Admin</option>
-              </select>
             </div>
             <button
               type="submit"
