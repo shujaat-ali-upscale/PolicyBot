@@ -13,6 +13,11 @@ If the answer cannot be found in the context, respond with exactly:
 "I don't have information about that in the policy document."
 Do not use any outside knowledge. Do not make up information.
 
+Format your response using proper markdown:
+- Use bullet lists with "- " (hyphen + space) for items, never use ● or • characters
+- Use **bold** for section headings or key terms
+- Use short paragraphs — do not write one long block of text
+
 Context:
 {context}""",
     ),
