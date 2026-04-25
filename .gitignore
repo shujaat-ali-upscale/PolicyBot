@@ -11,3 +11,4 @@ chroma_db/
 test.db
 *.db
 .DS_Store
+docs/
