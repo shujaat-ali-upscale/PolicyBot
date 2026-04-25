@@ -32,8 +32,13 @@ async def get_rag_response(question: str) -> dict:
 
 
 async def generate_stream(question: str) -> AsyncGenerator[str, None]:
-    candidates: list[Document] = hybrid_search(question, top_k=6)
-    docs = rerank(question, candidates, top_k=3) if candidates else []
+    try:
+        candidates: list[Document] = hybrid_search(question, top_k=6)
+        docs = rerank(question, candidates, top_k=3) if candidates else []
+    except Exception:
+        yield f"data: {json.dumps({'token': 'Sorry, something went wrong while searching. Please try again.'})}\n\n"
+        yield f"data: {json.dumps({'done': True, 'sources': []})}\n\n"
+        return
 
     if not docs:
         yield f"data: {json.dumps({'token': NO_INFO_RESPONSE})}\n\n"

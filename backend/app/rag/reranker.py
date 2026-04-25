@@ -13,7 +13,10 @@ def _get_model() -> CrossEncoder:
 
 
 def load_reranker() -> None:
-    _get_model()
+    model = _get_model()
+    # Force full initialization (tokenizer + ONNX/torch runtime warmup)
+    # so the first real request doesn't pay this cost
+    model.predict([["warmup query", "warmup passage"]])
 
 
 def rerank(query: str, chunks: list[Document], top_k: int = 3) -> list[Document]:
